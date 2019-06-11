@@ -1,6 +1,6 @@
 {
-  "name": "capacitor-firebase-auth",
-  "version": "0.1.0",
+  "name": "pxel-capacitor-firebase-auth",
+  "version": "0.1.6",
   "description": "Capacitor plugin for Firebase Authentication",
   "main": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -10,7 +10,7 @@
     "watch": "tsc --watch",
     "prepublishOnly": "npm run build"
   },
-  "author": "Bernardo Baumblatt",
+  "author": "Alex",
   "license": "MIT",
   "dependencies": {
     "@capacitor/core": "latest",
@@ -27,7 +27,7 @@
     "dist/",
     "ios/",
     "android/",
-    "CapacitorFirebaseAuth.podspec"
+    "PxelCapacitorFirebaseAuth.podspec"
   ],
   "keywords": [
     "capacitor",

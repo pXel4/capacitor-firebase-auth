@@ -30,26 +30,41 @@ class PhoneNumberProviderHandler: NSObject, ProviderHandler {
         self.mPhoneNumber = phone
         
         PhoneAuthProvider.provider().verifyPhoneNumber(phone, uiDelegate: nil) { (verificationID, error) in
-            if let errCode = AuthErrorCode(rawValue: error!._code) {
-                switch errCode {
-                    case AuthErrorCode.quotaExceeded:
-                        call.reject("Quota exceeded.")
-                    case AuthErrorCode.invalidPhoneNumber:
-                        call.reject("Invalid phone number.")
-                    case AuthErrorCode.captchaCheckFailed:
-                        call.reject("Captcha Check Failed")
-                    case AuthErrorCode.missingPhoneNumber:
-                        call.reject("Missing phone number.")
-                    default:
-                        call.reject("PhoneAuth Sign In failure: \(String(describing: error))")
+                    if error != nil {
+                        if let error = error {
+                            if let errCode = AuthErrorCode(rawValue: error._code) {
+                                switch errCode {
+                                case AuthErrorCode.quotaExceeded:
+                                    call.reject("Quota exceeded.")
+                                case AuthErrorCode.invalidPhoneNumber:
+                                    call.reject("Invalid phone number.")
+                                case AuthErrorCode.captchaCheckFailed:
+                                    call.reject("Captcha Check Failed")
+                                case AuthErrorCode.missingPhoneNumber:
+                                    call.reject("Missing phone number.")
+                                default:
+                                    call.reject("PhoneAuth Sign In failure: \(String(describing: error))")
+                                }
+
+                                return
+                            }
+                        }
+                    }
+
+                    self.mVerificationId = verificationID
+
+                    guard let verificationID = verificationID else {
+                        call.reject("There is no verificationID after .verifyPhoneNumber!")
+                        return
+                    }
+
+                    // return success call.
+                    call.success([
+                        "callbackId": call.callbackId,
+                        "verificationId":verificationID
+                    ]);
+
                 }
-                
-                return
-            }
-            
-            self.mVerificationId = verificationID;
-            
-        }
     }
     
     func signOut() {
@@ -68,6 +83,7 @@ class PhoneNumberProviderHandler: NSObject, ProviderHandler {
         }
         
         jsResult["phone"] = self.mPhoneNumber
+        jsResult["verificationId"] = self.mVerificationId
         jsResult["verificationCode"] = self.mVerificationCode
         
         return jsResult
