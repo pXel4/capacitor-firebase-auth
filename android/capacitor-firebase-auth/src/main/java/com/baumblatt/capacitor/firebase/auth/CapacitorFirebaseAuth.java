@@ -61,7 +61,7 @@ public class CapacitorFirebaseAuth extends Plugin {
 
         Log.d(PLUGIN_TAG, "Retrieving FirebaseAuth instance");
         this.mAuth = FirebaseAuth.getInstance();
-        this.mAuth.setLanguageCode("pt");
+//         this.mAuth.setLanguageCode("pt");
 
         for (String provider: this.providers) {
             if (provider.equalsIgnoreCase(getContext().getString(R.string.google_provider_id))) {
